@@ -54,6 +54,7 @@
         },
         mounted() {
             this.canvas = new fabric.Canvas(this.editorId);
+            console.log(this.canvas);
             this.canvas.setDimensions({width: this.canvasWidth, height: this.canvasHeight});
             this.canvas.backgroundColor = "#fff";
             let canvasProperties = {width: this.canvas.width, height: this.canvas.height}
@@ -281,7 +282,7 @@
             },
             saveImage() {
                 this.cancelCroppingImage();
-                return this.canvas.toSvg();
+                return this.canvas.toSVG();
             },
             uploadImage(e) {
                 this.cancelCroppingImage();
