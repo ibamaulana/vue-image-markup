@@ -281,7 +281,7 @@
             },
             saveImage() {
                 this.cancelCroppingImage();
-                return this.canvas.toDataURL('image/jpeg', 1);
+                return this.canvas.toSvg();
             },
             uploadImage(e) {
                 this.cancelCroppingImage();
