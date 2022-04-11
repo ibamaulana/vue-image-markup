@@ -62,7 +62,7 @@
             new CanvasHistory(this.canvas, currentCanvas);
         },
         methods: {
-            toJson{
+            toJson(){
                 let obj = this.canvas.toJSON();
                 return obj;
             },
