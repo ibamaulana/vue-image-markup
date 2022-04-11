@@ -62,6 +62,10 @@
             new CanvasHistory(this.canvas, currentCanvas);
         },
         methods: {
+            toJson{
+                let obj = this.canvas.toJSON();
+                return obj;
+            },
             getObjectsById(objectId){
                 let objects = this.canvas.getObjects();
                 let findedObject = [];
