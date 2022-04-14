@@ -49,12 +49,12 @@
                 fontSize: 32,
                 croppedImage: false,
                 history: [],
+                fill: '#000000',
+                stroke: '#000000'
             }
-
         },
         mounted() {
             this.canvas = new fabric.Canvas(this.editorId);
-            console.log(this.canvas);
             this.canvas.setDimensions({width: this.canvasWidth, height: this.canvasHeight});
             this.canvas.backgroundColor = "#fff";
             let canvasProperties = {width: this.canvas.width, height: this.canvas.height}
@@ -62,6 +62,14 @@
             new CanvasHistory(this.canvas, currentCanvas);
         },
         methods: {
+            loadFromJson(json){
+                console.log(this.canvas)
+                this.canvas.loadFromJSON(json, function() {
+                    this.canvas.renderAll(); 
+                },function(o,object){
+                    console.log(o,object)
+                })
+            },
             toJson(){
                 let obj = this.canvas.toJSON();
                 return obj;
@@ -78,6 +86,18 @@
             },
             changeColor(colorProperty) {
                 this.color = colorProperty;
+                this.set(this.currentActiveTool)
+            },
+            changeFill(colorProperty) {
+                this.fill = colorProperty;
+                this.set(this.currentActiveTool)
+            },
+            changeStroke(colorProperty) {
+                this.stroke = colorProperty;
+                this.set(this.currentActiveTool)
+            },
+            changeStrokeWidth(colorProperty) {
+                this.strokeWidth = colorProperty;
                 this.set(this.currentActiveTool)
             },
             setBackgroundImage(imageUrl, backgroundColor = "#fff") {
@@ -123,7 +143,7 @@
                     case "text":
                         this.currentActiveTool = type;
                         this.params = {
-                            fill: (params && params.fill) ? params.fill : this.color,
+                            fill: (params && params.fill) ? params.fill : this.fill,
                             fontFamily: (params && params.fontFamily) ? params.fontFamily : 'Arial',
                             fontSize: (params && params.fontSize) ? params.fontSize : this.fontSize,
                             fontStyle: (params && params.fontStyle) ? params.fontStyle : this.fontStyle,
@@ -138,8 +158,8 @@
                         this.cancelCroppingImage();
                         this.currentActiveTool = type;
                         this.params = {
-                            fill: (params && params.fill) ? params.fill : 'transparent',
-                            stroke: (params && params.stroke) ? params.stroke : this.color,
+                            fill: (params && params.fill) ? params.fill : this.fill,
+                            stroke: (params && params.stroke) ? params.stroke : this.stroke,
                             strokeWidth: (params && params.strokeWidth) ? params.strokeWidth : this.strokeWidth,
                             disableCircleEditing: (params && params.disableCircleEditing) ? params.disableCircleEditing : false,
                             top: (params && params.top) ? params.top : 0,
@@ -156,8 +176,8 @@
                         this.cancelCroppingImage();
                         this.currentActiveTool = type;
                         this.params = {
-                            fill: (params && params.fill) ? params.fill : 'transparent',
-                            stroke: (params && params.stroke) ? params.stroke : this.color,
+                            fill: (params && params.fill) ? params.fill : this.fill,
+                            stroke: (params && params.stroke) ? params.stroke : this.stroke,
                             strokeWidth: (params && params.strokeWidth) ? params.strokeWidth : this.strokeWidth,
                             angle: (params && params.angle) ? params.angle : 0,
                             width: (params && params.width) ? params.width : null,
@@ -177,8 +197,8 @@
                         this.cancelCroppingImage();
                         this.currentActiveTool = type;
                         this.params = {
-                            fill: (params && params.fill) ? params.fill : 'transparent',
-                            stroke: (params && params.stroke) ? params.stroke : this.color,
+                            fill: (params && params.fill) ? params.fill : this.fill,
+                            stroke: (params && params.stroke) ? params.stroke : this.stroke,
                             strokeWidth: (params && params.strokeWidth) ? params.strokeWidth : this.strokeWidth,
                             angle: (params && params.angle) ? params.angle : 0,
                             width: (params && params.width) ? params.width : null,
@@ -198,8 +218,8 @@
                         this.cancelCroppingImage();
                         this.currentActiveTool = type;
                         this.params = {
-                            fill: (params && params.fill) ? params.fill : 'transparent',
-                            stroke: (params && params.stroke) ? params.stroke : this.color,
+                            fill: (params && params.fill) ? params.fill : this.fill,
+                            stroke: (params && params.stroke) ? params.stroke : this.stroke,
                             strokeWidth: (params && params.strokeWidth) ? params.strokeWidth : this.strokeWidth,
                             angle: (params && params.angle) ? params.angle : 0,
                             width: (params && params.width) ? params.width : null,
@@ -222,8 +242,8 @@
                     case 'arrow':
                         this.currentActiveTool = type;
                         this.params = {
-                            fill: (params && params.fill) ? params.fill : 'transparent',
-                            stroke: (params && params.stroke) ? params.stroke : this.color,
+                            fill: (params && params.fill) ? params.fill : this.fill,
+                            stroke: (params && params.stroke) ? params.stroke : this.stroke,
                             strokeWidth: (params && params.strokeWidth) ? params.strokeWidth : this.strokeWidth,
                             strokeUniform: (params && params.strokeUniform) ? params.strokeUniform : true,
                             noScaleCache: (params && params.noScaleCache) ? params.noScaleCache : false,
@@ -235,7 +255,7 @@
                     case 'freeDrawing':
                         this.currentActiveTool = type;
                         this.params = {
-                            stroke: (params && params.stroke) ? params.stroke : this.color,
+                            stroke: (params && params.stroke) ? params.stroke : this.fill,
                             strokeWidth: (params && params.strokeWidth) ? params.strokeWidth : this.strokeWidth,
                             drawingMode: (params && params.drawingMode) ? params.drawingMode : true,
                             id: (params && params.id) ? params.id : '',
@@ -286,7 +306,7 @@
             },
             saveImage() {
                 this.cancelCroppingImage();
-                return this.canvas.toSVG();
+                return this.canvas.toDataURL('image/jpeg', 1);
             },
             uploadImage(e) {
                 this.cancelCroppingImage();
