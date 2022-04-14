@@ -63,6 +63,7 @@
         },
         methods: {
             loadFromJson(json){
+                console.log('kontol')
                 console.log(this.canvas)
                 this.canvas.loadFromJSON(json, function() {
                     this.canvas.renderAll(); 
