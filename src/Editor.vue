@@ -47,6 +47,7 @@
                 color: '#000000',
                 strokeWidth: 7,
                 fontSize: 32,
+                fontStyle: 'normal',
                 croppedImage: false,
                 history: [],
                 fill: '#000000',
@@ -67,8 +68,14 @@
                 this.canvas.loadFromJSON(json, function() {
                     em.canvas.renderAll(); 
                 },function(o,object){
-                    console.log(o,object)
+                    
                 })
+            },
+            getActiveObject(){
+                return this.canvas.getActiveObject()
+            },
+            fabricCanvas(){
+                return this.canvas;
             },
             toJson(){
                 let obj = this.canvas.toJSON();
@@ -86,19 +93,19 @@
             },
             changeColor(colorProperty) {
                 this.color = colorProperty;
-                this.set(this.currentActiveTool)
+                // this.set(this.currentActiveTool)
             },
             changeFill(colorProperty) {
                 this.fill = colorProperty;
-                this.set(this.currentActiveTool)
+                // this.set(this.currentActiveTool)
             },
             changeStroke(colorProperty) {
                 this.stroke = colorProperty;
-                this.set(this.currentActiveTool)
+                // this.set(this.currentActiveTool)
             },
             changeStrokeWidth(colorProperty) {
                 this.strokeWidth = colorProperty;
-                this.set(this.currentActiveTool)
+                // this.set(this.currentActiveTool)
             },
             setBackgroundImage(imageUrl, backgroundColor = "#fff") {
                 let img = new Image();
@@ -153,7 +160,6 @@
                         };
                         this.addText(this.params);
                         break;
-
                     case "circle":
                         this.cancelCroppingImage();
                         this.currentActiveTool = type;
@@ -386,9 +392,11 @@
                 this.createCircle = false;
                 if (params.width && params.height) {
                     this.drawRect(params);
+                    console.log('kesini')
                 } else {
                     this.createRect = true;
                     new Shape(this.canvas, this.createRect, type, params);
+                    console.log('kesana')
                 }
             },
             drawArrow(params) {
@@ -549,6 +557,7 @@
                         noScaleCache: params.noScaleCache
                     });
                     this.canvas.add(this.rectangle);
+                    console.log('lha nambah to')
                 }
             },
             drawCircle(params) {
@@ -575,5 +584,6 @@
 <style>
     .upper-canvas{
         z-index: 1;
+        border: 1px solid gray;
     }
 </style>
